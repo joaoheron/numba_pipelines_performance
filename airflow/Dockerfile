@@ -1,7 +1,7 @@
 FROM puckel/docker-airflow
 
-ARG BITBUCKET_USER
-ARG BITBUCKET_PASSWORD
+ARG AUTH_USER
+ARG AUTH_PASSWORD
 
 USER root
 
@@ -20,4 +20,4 @@ RUN pip install -U pip
 
 RUN pip install -r /usr/local/airflow/requirements.txt
 
-COPY airflow/dags/ /usr/local/airflow/dags/
+COPY dags/ /usr/local/airflow/dags/
