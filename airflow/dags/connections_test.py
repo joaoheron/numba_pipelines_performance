@@ -1,8 +1,8 @@
 from datetime import timedelta
 from airflow.models import DAG
-from utils import common_tasks
 from airflow.utils import timezone
-from utils.vars import email_list
+from airflow.operators.postgres_operator import PostgresOperator
+from utils.vars import email_list, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT, POSTGRES_CONNECTION
 
 start_date = timezone.utcnow().replace(
     minute=0,
@@ -34,18 +34,18 @@ dag = DAG(
 def build_test_connection_postgres_task(dag):
 
     select_public = """
-        select * from public.sample_table limit 1;
+        select * from public.orders limit 1;
     """
 
     return PostgresOperator(
-        task_id=f'test_connection_postgres_{POSTGRES_DB_NAME}',
+        task_id=f'test_connection_postgres_{DB_NAME}',
         sql=[
             select_public
         ],
-        postgres_conn_id=AIRFLOW_POSTGRES_CONN,
-        database=POSTGRES_DB_NAME,
+        postgres_conn_id=POSTGRES_CONNECTION,
+        database=DB_NAME,
         dag=dag
     )
 
-test_postgres_connection_task = common_tasks.build_test_connection_postgres_task(dag)
+test_postgres_connection_task = build_test_connection_postgres_task(dag)
 
