@@ -83,3 +83,36 @@ dist: clean ## builds source and wheel package
 
 install: clean ## install the package to the active Python's site-packages
 	python setup.py install
+
+build_airflow: docker_login
+	test -n "Auth User: $(BITBUCKET_USER)"
+	test -n "Airflow Image Version: $(AIRFLOW_IMAGE)"
+	echo "==========================================================="
+	read -s -p "HAVE YOU SOURCED project_conf.sh FILE? (CTRL C FOR CANCELING) "
+	echo "==========================================================="
+	cd airflow/
+	docker build -t $(AIRFLOW_IMAGE) . \
+		--build-arg BITBUCKET_USER="${BITBUCKET_USER}" \
+		--build-arg BITBUCKET_PASSWORD="${BITBUCKET_PASSWORD}"
+
+run_airflow_locally: build_airflow
+	function tearDown {
+		rm .airflow_vars
+		rm .airflow_pools
+	}
+	trap tearDown EXIT
+	docker rm -f airflow-local || true
+	docker run --name airflow-local -d  \
+		-e AIRFLOW__CORE__SQL_ALCHEMY_CONN="sqlite:////airflowdb/airflow.db" \
+		-e AIRFLOW__CORE__FERNET_KEY=${AIRFLOW__CORE__FERNET_KEY} \
+		-p 8088:8080 \
+		-v ${PWD}/airflow/dags:/usr/local/airflow/dags \
+		-v ${PWD}/airflow/:/tmp/ \
+		-v airflow_local_db:/tmp/airflow/ $(AIRFLOW_IMAGE)
+	
+	sleep 20
+	bash airflow_connections.sh local
+	envsubst < airflow_vars.json > .airflow_vars
+	envsubst < airflow_pools.json > .airflow_pools
+	bash run_airflow_command.sh local airflow variables -i /tmp/.airflow_vars
+	bash run_airflow_command.sh local airflow pool -i /tmp/.airflow_pools
