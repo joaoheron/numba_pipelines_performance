@@ -23,6 +23,11 @@ export PRINT_HELP_PYSCRIPT
 
 BROWSER := python -c "$$BROWSER_PYSCRIPT"
 
+export SHELL:=/bin/bash
+export SHELLOPTS:=$(if $(SHELLOPTS),$(SHELLOPTS):)pipefail:errexit
+
+.ONESHELL:
+
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
@@ -84,16 +89,16 @@ dist: clean ## builds source and wheel package
 install: clean ## install the package to the active Python's site-packages
 	python setup.py install
 
-build_airflow: docker_login
-	test -n "Auth User: $(BITBUCKET_USER)"
+build_airflow:
+	test -n "Auth User: $(AUTH_USER)"
 	test -n "Airflow Image Version: $(AIRFLOW_IMAGE)"
 	echo "==========================================================="
 	read -s -p "HAVE YOU SOURCED project_conf.sh FILE? (CTRL C FOR CANCELING) "
 	echo "==========================================================="
 	cd airflow/
 	docker build -t $(AIRFLOW_IMAGE) . \
-		--build-arg BITBUCKET_USER="${BITBUCKET_USER}" \
-		--build-arg BITBUCKET_PASSWORD="${BITBUCKET_PASSWORD}"
+		--build-arg AUTH_USER="${AUTH_USER}" \
+		--build-arg AUTH_PASSWORD="${AUTH_PASSWORD}"
 
 run_airflow_locally: build_airflow
 	function tearDown {
@@ -101,6 +106,7 @@ run_airflow_locally: build_airflow
 		rm .airflow_pools
 	}
 	trap tearDown EXIT
+	cd airflow/
 	docker rm -f airflow-local || true
 	docker run --name airflow-local -d  \
 		-e AIRFLOW__CORE__SQL_ALCHEMY_CONN="sqlite:////airflowdb/airflow.db" \
@@ -110,7 +116,7 @@ run_airflow_locally: build_airflow
 		-v ${PWD}/airflow/:/tmp/ \
 		-v airflow_local_db:/tmp/airflow/ $(AIRFLOW_IMAGE)
 	
-	sleep 20
+	sleep 10
 	bash airflow_connections.sh local
 	envsubst < airflow_vars.json > .airflow_vars
 	envsubst < airflow_pools.json > .airflow_pools
