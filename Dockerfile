@@ -20,4 +20,4 @@ RUN pip install -U pip
 
 RUN pip install -r /usr/local/airflow/requirements.txt
 
-COPY dags/ /usr/local/airflow/dags/
+COPY airflow/dags/ /usr/local/airflow/dags/
