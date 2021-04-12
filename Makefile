@@ -90,13 +90,10 @@ install: clean ## install the package to the active Python's site-packages
 	python setup.py install
 
 build_airflow:
-	test -n "Auth User: $(AUTH_USER)"
 	test -n "Airflow Image Version: $(AIRFLOW_IMAGE)"
 	read -s -p "Are you sure to build new docker airflow image? (CTRL C FOR CANCELING) "
 	echo "==========================================================="
-	docker build -t $(AIRFLOW_IMAGE) . \
-		--build-arg AUTH_USER="${AUTH_USER}" \
-		--build-arg AUTH_PASSWORD="${AUTH_PASSWORD}"
+	docker build -t $(AIRFLOW_IMAGE) .
 
 run_airflow_locally: build_airflow
 	function tearDown {
