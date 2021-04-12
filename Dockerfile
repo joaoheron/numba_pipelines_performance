@@ -1,8 +1,5 @@
 FROM puckel/docker-airflow
 
-ARG AUTH_USER
-ARG AUTH_PASSWORD
-
 USER root
 
 RUN usermod -aG root airflow
