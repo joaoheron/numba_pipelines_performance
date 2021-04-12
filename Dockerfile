@@ -1,8 +1,5 @@
 FROM puckel/docker-airflow
 
-ARG AUTH_USER
-ARG AUTH_PASSWORD
-
 USER root
 
 RUN usermod -aG root airflow
@@ -20,4 +17,4 @@ RUN pip install -U pip
 
 RUN pip install -r /usr/local/airflow/requirements.txt
 
-COPY dags/ /usr/local/airflow/dags/
+COPY airflow/dags/ /usr/local/airflow/dags/

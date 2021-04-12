@@ -90,15 +90,10 @@ install: clean ## install the package to the active Python's site-packages
 	python setup.py install
 
 build_airflow:
-	test -n "Auth User: $(AUTH_USER)"
 	test -n "Airflow Image Version: $(AIRFLOW_IMAGE)"
+	read -s -p "Are you sure to build new docker airflow image? (CTRL C FOR CANCELING) "
 	echo "==========================================================="
-	read -s -p "HAVE YOU SOURCED project_conf.sh FILE? (CTRL C FOR CANCELING) "
-	echo "==========================================================="
-	cd airflow/
-	docker build -t $(AIRFLOW_IMAGE) . \
-		--build-arg AUTH_USER="${AUTH_USER}" \
-		--build-arg AUTH_PASSWORD="${AUTH_PASSWORD}"
+	docker build -t $(AIRFLOW_IMAGE) .
 
 run_airflow_locally: build_airflow
 	function tearDown {
@@ -106,7 +101,8 @@ run_airflow_locally: build_airflow
 		rm .airflow_pools
 	}
 	trap tearDown EXIT
-	cd airflow/
+	read -s -p "Are you sure to run airflow image locally? (CTRL C FOR CANCELING) "
+	echo "==========================================================="
 	docker rm -f airflow-local || true
 	docker run --name airflow-local -d  \
 		-e AIRFLOW__CORE__SQL_ALCHEMY_CONN="sqlite:////airflowdb/airflow.db" \
@@ -116,7 +112,8 @@ run_airflow_locally: build_airflow
 		-v ${PWD}/airflow/:/tmp/ \
 		-v airflow_local_db:/tmp/airflow/ $(AIRFLOW_IMAGE)
 	
-	sleep 10
+	sleep 15
+	cd airflow/
 	bash airflow_connections.sh local
 	envsubst < airflow_vars.json > .airflow_vars
 	envsubst < airflow_pools.json > .airflow_pools

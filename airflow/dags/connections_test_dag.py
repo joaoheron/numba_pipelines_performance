@@ -4,6 +4,7 @@ from airflow.utils import timezone
 from airflow.operators.postgres_operator import PostgresOperator
 from utils.vars import email_list, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT, POSTGRES_CONNECTION
 
+
 start_date = timezone.utcnow().replace(
     minute=0,
     second=0,
@@ -48,4 +49,3 @@ def build_test_connection_postgres_task(dag):
     )
 
 test_postgres_connection_task = build_test_connection_postgres_task(dag)
-
