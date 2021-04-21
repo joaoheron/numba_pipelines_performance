@@ -19,9 +19,9 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('..'))
-
 import numba_pipelines_performance
+
+sys.path.insert(0, os.path.abspath('..'))
 
 # -- General configuration ---------------------------------------------
 
@@ -157,6 +157,3 @@ texinfo_documents = [
      'One line description of project.',
      'Miscellaneous'),
 ]
-
-
-

@@ -2,8 +2,7 @@ from datetime import timedelta
 from airflow.models import DAG
 from airflow.utils import timezone
 from airflow.operators.postgres_operator import PostgresOperator
-from utils.vars import email_list, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT, POSTGRES_CONNECTION
-
+from utils.vars import email_list, DB_NAME, POSTGRES_CONNECTION
 
 start_date = timezone.utcnow().replace(
     minute=0,
