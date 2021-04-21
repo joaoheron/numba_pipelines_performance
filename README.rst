@@ -16,22 +16,42 @@ Numba Pipelines Performance
 
 
 
-Data pipelines performance comparison using Numba JIT compiler
+This project uses Numba, an open source JIT compiler that translates Python functions to optimized machine code at runtime, to compare Apache Airflow DAG performances between accelerated and non-accelerated methods.
 
 
 * Free software: Apache Software License 2.0
 * Documentation: https://numba-pipelines-performance.readthedocs.io.
 
 
-Features
+### Getting started
 --------
 
-* TODO
+- Check codestyle with flake8:
+```bash
+    make lint
+```
 
-Credits
--------
+- Run tests with the default Pytest library:
+```bash
+    make test
+```
 
-This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
+- Generate Sphinx HTML documentation, including API docs:
+```bash
+    make docs
+```
 
-.. _Cookiecutter: https://github.com/audreyr/cookiecutter
-.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
+- Compile the docs watching for changes:
+```bash
+    make servedocs
+```
+
+- Builds project's docker image
+```bash
+    make build
+```
+
+- Builds project's docker image and run it
+```bash
+    make run_locally
+```
