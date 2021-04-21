@@ -56,7 +56,6 @@ def build_numba_loop_c(dag):
         dag=dag
     )
 
-
 def build_numba_numpy_python(dag):
 
     return PythonOperator(

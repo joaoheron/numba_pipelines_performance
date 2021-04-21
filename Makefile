@@ -89,13 +89,13 @@ dist: clean ## builds source and wheel package
 install: clean ## install the package to the active Python's site-packages
 	python setup.py install
 
-build_airflow:
+build:  ## builds project's docker image
 	test -n "Airflow Image Version: $(AIRFLOW_IMAGE)"
 	read -s -p "Are you sure to build new docker airflow image? (CTRL C FOR CANCELING) "
 	echo "==========================================================="
 	docker build -t $(AIRFLOW_IMAGE) .
 
-run_airflow_locally: build_airflow
+run_locally: build ## builds project's docker image and run it
 	function tearDown {
 		rm .airflow_vars
 		rm .airflow_pools
@@ -111,7 +111,7 @@ run_airflow_locally: build_airflow
 		-v ${PWD}/airflow/dags:/usr/local/airflow/dags \
 		-v ${PWD}/airflow/:/tmp/ \
 		-v airflow_local_db:/tmp/airflow/ $(AIRFLOW_IMAGE)
-	
+
 	sleep 15
 	cd airflow/
 	bash airflow_connections.sh local
