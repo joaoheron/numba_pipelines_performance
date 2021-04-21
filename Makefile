@@ -38,7 +38,7 @@ clean-build: ## remove build artifacts
 	rm -fr dist/
 	rm -fr .eggs/
 	find . -name '*.egg-info' -exec rm -fr {} +
-	find . -name '*.egg' -exec rm -f {} +
+	find . -name '*.egg' -exec rm -rf {} +
 
 clean-pyc: ## remove Python file artifacts
 	find . -name '*.pyc' -exec rm -f {} +
@@ -53,13 +53,10 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr .pytest_cache
 
 lint: ## check style with flake8
-	flake8 numba_pipelines_performance tests
+	flake8 numba_pipelines_performance/ tests/ docs/
 
 test: ## run tests quickly with the default Python
 	pytest
-
-test-all: ## run tests on every Python version with tox
-	tox
 
 coverage: ## check code coverage quickly with the default Python
 	coverage run --source numba_pipelines_performance -m pytest
@@ -89,31 +86,31 @@ dist: clean ## builds source and wheel package
 install: clean ## install the package to the active Python's site-packages
 	python setup.py install
 
-build_airflow:
+build_project:  ## build project's docker image
 	test -n "Airflow Image Version: $(AIRFLOW_IMAGE)"
 	read -s -p "Are you sure to build new docker airflow image? (CTRL C FOR CANCELING) "
 	echo "==========================================================="
 	docker build -t $(AIRFLOW_IMAGE) .
 
-run_airflow_locally: build_airflow
+run_project_locally: build_project ## build project's docker image and run it
+	trap tearDown EXIT
 	function tearDown {
 		rm .airflow_vars
 		rm .airflow_pools
 	}
-	trap tearDown EXIT
-	read -s -p "Are you sure to run airflow image locally? (CTRL C FOR CANCELING) "
+	read -s -p "Are you sure to run numba_pipelines_performance image locally? (CTRL C FOR CANCELING) "
 	echo "==========================================================="
 	docker rm -f airflow-local || true
 	docker run --name airflow-local -d  \
 		-e AIRFLOW__CORE__SQL_ALCHEMY_CONN="sqlite:////airflowdb/airflow.db" \
 		-e AIRFLOW__CORE__FERNET_KEY=${AIRFLOW__CORE__FERNET_KEY} \
 		-p 8088:8080 \
-		-v ${PWD}/airflow/dags:/usr/local/airflow/dags \
-		-v ${PWD}/airflow/:/tmp/ \
-		-v airflow_local_db:/tmp/airflow/ $(AIRFLOW_IMAGE)
-	
+		-v ${PWD}/numba_pipelines_performance/dags:/usr/local/numba_pipelines_performance/dags \
+		-v ${PWD}/numba_pipelines_performance/:/tmp/ \
+		-v airflow_local_db:/tmp/numba_pipelines_performance/ $(AIRFLOW_IMAGE)
+
 	sleep 15
-	cd airflow/
+	cd numba_pipelines_performance/
 	bash airflow_connections.sh local
 	envsubst < airflow_vars.json > .airflow_vars
 	envsubst < airflow_pools.json > .airflow_pools

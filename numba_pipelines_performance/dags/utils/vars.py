@@ -14,5 +14,5 @@ AWS_ACCESS_KEY_ID = Variable.get("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = Variable.get("AWS_SECRET_ACCESS_KEY")
 
 email_list = [
-    'joaoheron@gmail.com'
+    'your@mail.com'
 ]
