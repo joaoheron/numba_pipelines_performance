@@ -1,20 +1,4 @@
-===========================
-Numba Pipelines Performance
-===========================
-
-
-.. image:: https://img.shields.io/pypi/v/numba_pipelines_performance.svg
-        :target: https://pypi.python.org/pypi/numba_pipelines_performance
-
-.. image:: https://img.shields.io/travis/joaoheron/numba_pipelines_performance.svg
-        :target: https://travis-ci.com/joaoheron/numba_pipelines_performance
-
-.. image:: https://readthedocs.org/projects/numba-pipelines-performance/badge/?version=latest
-        :target: https://numba-pipelines-performance.readthedocs.io/en/latest/?version=latest
-        :alt: Documentation Status
-
-
-
+# Numba Pipelines Performance
 
 This project uses Numba, an open source JIT compiler that translates Python functions to optimized machine code at runtime, to compare Apache Airflow DAG performances between accelerated and non-accelerated methods.
 
