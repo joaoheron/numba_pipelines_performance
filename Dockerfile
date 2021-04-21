@@ -11,10 +11,10 @@ RUN apt-get update \
 
 USER airflow
 
-COPY requirements.txt /usr/local/airflow/
+COPY requirements.txt /usr/local/numba_pipelines_performance/
 
 RUN pip install -U pip
 
-RUN pip install -r /usr/local/airflow/requirements.txt
+RUN pip install -r /usr/local/numba_pipelines_performance/requirements.txt
 
-COPY airflow/dags/ /usr/local/airflow/dags/
+COPY numba_pipelines_performance/dags/ /usr/local/numba_pipelines_performance/dags/
