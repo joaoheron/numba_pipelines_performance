@@ -26,6 +26,16 @@ This project uses Numba, an open source JIT compiler that translates Python func
 ### Getting started
 --------
 
+- Display all make cli commands options and descriptions:
+```bash
+    make help
+```
+
+- Remove all build, test, coverage and Python artifacts:
+```bash
+    make clean
+```
+
 - Check codestyle with flake8:
 ```bash
     make lint
@@ -34,6 +44,11 @@ This project uses Numba, an open source JIT compiler that translates Python func
 - Run tests with the default Pytest library:
 ```bash
     make test
+```
+
+- Check code coverage quickly with the default Python:
+```bash
+    make coverage
 ```
 
 - Generate Sphinx HTML documentation, including API docs:
@@ -48,10 +63,10 @@ This project uses Numba, an open source JIT compiler that translates Python func
 
 - Builds project's docker image
 ```bash
-    make build
+    make build_project
 ```
 
 - Builds project's docker image and run it
 ```bash
-    make run_locally
+    make build_project_locally
 ```

@@ -23,35 +23,28 @@ This project uses Numba, an open source JIT compiler that translates Python func
 * Documentation: https://numba-pipelines-performance.readthedocs.io.
 
 
-### Getting started
---------
+Getting started 
 
 - Check codestyle with flake8:
-```bash
-    make lint
-```
+
+    $ make lint
 
 - Run tests with the default Pytest library:
-```bash
-    make test
-```
+
+    $ make test
 
 - Generate Sphinx HTML documentation, including API docs:
-```bash
-    make docs
-```
+
+    $ make docs
 
 - Compile the docs watching for changes:
-```bash
-    make servedocs
-```
 
-- Builds project's docker image
-```bash
-    make build
-```
+    $ make servedocs
 
-- Builds project's docker image and run it
-```bash
-    make run_locally
-```
+- Builds project's docker image:
+
+    $ make build_project
+
+- Builds project's docker image and run it:
+
+    $ make run_project_locally
