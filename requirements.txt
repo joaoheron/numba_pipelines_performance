@@ -12,3 +12,4 @@ pytest==4.6.5
 pytest-runner==5.1
 numba==0.53.1
 apache-airflow==1.10.12
+kedro==0.17.0
