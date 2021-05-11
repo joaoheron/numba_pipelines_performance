@@ -50,7 +50,7 @@ This project uses Numba, an open source JIT compiler that translates Python func
     make build_project
 ```
 
-- Builds project's docker image and run it
+- Builds project's docker image and run it locally
 ```bash
-    make build_project_locally
+    make run_project_locally
 ```
